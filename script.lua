@@ -3,12 +3,23 @@ require 'cairo'
 
 local function drawTxt()
   font = "Mono"
-  font_size = 12
-  text = "bill yin"
-  xpos, ypos = 100, 100
-  r, g, b, a = 246 / 255, 155 / 255, 11 / 255, 0.7
+  font_size = 24
+  xpos, ypos = 50, 30
   font_slant = CAIRO_FONT_STANT_NORMAL
   font_face = CAIRO_FONT_WEIGHT_NORMAL
+  seconds = tonumber(os.date("%S"))
+  minutes = tonumber(os.date("%M"))
+  hours = tonumber(os.date("%I"))
+  ---r, g, b, a = hours / 12, minutes / 60, seconds / 60, 0.9
+  if r == nil then
+    r, g, b, a = 1, 1, 1, 1
+  end
+  math.randomseed(os.time())
+  if seconds == 0 then
+    r, g, b = math.random(), math.random(), math.random()
+  end
+  ---print(r, g, b)
+  text = string.format("%02d:%02d:%02d", hours, minutes, seconds)
   -------------------------------
   cairo_select_font_face(cr, font, font_slant, font_face)
   cairo_set_font_size(cr, font_size)
@@ -20,7 +31,7 @@ end
 
 local function draw2()
   local cpu_perc = tonumber(conky_parse('${cpu}'))
-  r, g, b, a = 1, 1, 1, 1
+  local r, g, b, a = 1, 1, 1, 1
   line_width = 5
   line_cap = CAIRO_LINE_CAP_BUTT
   startx, starty = 100, 120
@@ -45,7 +56,7 @@ local function drawHistory()
   --print("---------")
   if cpu_table ~= nil then
     total_len = 10
-    r, g, b, a = 1, 0.5, 0.5, 1
+    local r, g, b, a = 1, 0.5, 0.5, 1
     width = 5
     cairo_set_source_rgba(cr, r, g, b, a)
     cairo_set_line_width(cr, width)
